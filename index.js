@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { ClientPipe } = require('./lib/pipe');
 const { server } = require('./lib/server');
-const defaults = require('./defaults');
+const defaults = require('./lib/defaults');
 
 class PageReloadPlugin {
     constructor(options = {}) {
@@ -26,13 +26,12 @@ class PageReloadPlugin {
                 if (this.options.indexHtml){                
                     
                     const fileName = path.join(opt.output.path,this.options.indexHtml);
-                    if (path.existsSync(fileName)){
-                        
+                    try{
+                        fs.accessSync(fileName, fs.constants.R_OK | fs.constants.W_OK);
                         let content = fs.readFileSync(fileName,'utf8');
                         content = content.replace('</html>',`<script type="text/javascript">${this.script}</script>\n</html>`);
                         fs.writeFileSync(fileName,content);
-
-                    }else{
+                    }catch(e){
                         console.info('--------------------------------------------------------------------')
                         console.warn(`page-reload-webpack-plugin: file ${fileName} not exists`);
                         console.info('--------------------------------------------------------------------')
@@ -46,5 +45,5 @@ class PageReloadPlugin {
         });
     } 
 }
-
-module.exports = {PageReloadPlugin,server};
+const PageReloadServer = server;
+module.exports = {PageReloadPlugin,PageReloadServer};
