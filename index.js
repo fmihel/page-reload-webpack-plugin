@@ -11,6 +11,7 @@ class PageReloadPlugin {
             pipe:defaults.pipe,
             port:defaults.port,
             indexHtml:defaults.indexHtml,
+            enable:true
         });
 
         this.script = `(function(){let ws = new WebSocket('ws://localhost:${this.options.port}');ws.onopen = () => {console.log('page-reload connect: ok');};ws.onmessage = (ev) => {document.location.reload(true);};}());`;
@@ -21,7 +22,7 @@ class PageReloadPlugin {
             stats /* stats is passed as argument when done hook is tapped.  */
         ) => {
             
-            if (!stats.hasErrors()){
+            if ((this.enable)&&(!stats.hasErrors())){
                 const opt = stats.compilation.options;
                 if (this.options.indexHtml){                
                     
