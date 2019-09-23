@@ -51,12 +51,12 @@ app.listen(3000, (err) => {
 node server.js
 ```
 
-**4. Открыть страницу браузер**
+**3. Открыть страницу браузер**
 ```
 http://localhost:3000/
 ```
 
-**3. Конфигурация webpack**</br>
+**4. Конфигурация webpack**</br>
 В файле *webpack.config.js*:
 ```
 const { PageReloadPlugin } = require('page-reload-webpack-plugin');
@@ -70,7 +70,7 @@ module.exports = {
     ],
 };
 ```
-**4. Всё**</br>
+**5. Всё**</br>
 Теперь после каждой успешной сборки страница *http://localhost:3000/* будет перезагружена автоматически, 
 без создания дополнительных вкладок.
 ``` 

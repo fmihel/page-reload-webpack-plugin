@@ -22,7 +22,7 @@ class PageReloadPlugin {
             stats /* stats is passed as argument when done hook is tapped.  */
         ) => {
             
-            if ((this.enable)&&(!stats.hasErrors())){
+            if ((this.options.enable)&&(!stats.hasErrors())){
                 const opt = stats.compilation.options;
                 if (this.options.indexHtml){                
                     
