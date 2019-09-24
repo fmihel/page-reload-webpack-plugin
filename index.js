@@ -16,13 +16,26 @@ class PageReloadPlugin {
 
         this.script = `(function(){let ws = new WebSocket('ws://localhost:${this.options.port}');ws.onopen = () => {console.log('page-reload connect: ok');};ws.onmessage = (ev) => {document.location.reload(true);};}());`;
     }
+    mainIsWebackDevServer(){
+        const wp = 'webpack-dev-server.js';
+        try{
+
+            if (process.mainModule.filename.indexOf(wp)>=0)
+                return true;
+            return (process.argv.findIndex(v=>v.indexOf(wp)>=0)!==-1);
+
+        }catch(e){
+            return false;
+        }
+        
+    }
     
     apply(compiler) {
         compiler.hooks.done.tap('page-reload-webpack-plugin', (
             stats /* stats is passed as argument when done hook is tapped.  */
         ) => {
             
-            if ((this.options.enable)&&(!stats.hasErrors())){
+            if ((this.options.enable)&&(!this.mainIsWebackDevServer())&&(!stats.hasErrors())){
                 const opt = stats.compilation.options;
                 if (this.options.indexHtml){                
                     
