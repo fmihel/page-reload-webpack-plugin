@@ -1,6 +1,6 @@
 {
   "name": "page-reload-webpack-plugin",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "reload page after build webapck, is not watch mode!",
   "main": "index.js",
   "scripts": {
