@@ -16,18 +16,25 @@ class PageReloadPlugin {
 
         this.script = `(function(){let ws = new WebSocket('ws://localhost:${this.options.port}');ws.onopen = () => {console.log('page-reload connect: ok');};ws.onmessage = (ev) => {document.location.reload(true);};}());`;
     }
+    /** проверка на то, что используется webpack-dev-server или webpack-dev-middleware*/
     mainIsWebackDevServer(){
-        const wp = 'webpack-dev-server.js';
         try{
-
-            if (process.mainModule.filename.indexOf(wp)>=0)
-                return true;
-            return (process.argv.findIndex(v=>v.indexOf(wp)>=0)!==-1);
-
+            let keys = ['webpack-dev-server','webpack-dev-middleware'];
+            let o = process.mainModule.children;
+            
+            for(let i = 0;i<o.length;i++){
+                let module = o[i];
+                for(let field in module){
+                    if (field === 'filename'){
+                        if (keys.find(key=>module[field].indexOf(key)>=0))
+                            return true;
+                    }
+                }
+            };
+            
         }catch(e){
-            return false;
         }
-        
+        return false;
     }
     
     apply(compiler) {
